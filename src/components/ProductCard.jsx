@@ -1,5 +1,20 @@
 import { useState } from "react";
 
+function CardImage({ product }) {
+  return (
+    <div className="card-image">
+      {product.thumbnail ? (
+        <img src={product.thumbnail} alt={product.title} loading="lazy" />
+      ) : (
+        <div className="placeholder">
+          {product.title.charAt(0).toUpperCase()}
+        </div>
+      )}
+      {product.isLocal && <span className="badge-local">Nou</span>}
+    </div>
+  );
+}
+
 export default function ProductCard({ product, onUpdate, onDelete }) {
   const [isEditing, setIsEditing] = useState(false);
   const [title, setTitle] = useState(product.title);
@@ -18,25 +33,56 @@ export default function ProductCard({ product, onUpdate, onDelete }) {
 
   if (isEditing) {
     return (
-      <div style={{ marginTop: "16px" }}>
-        <input value={title} onChange={(e) => setTitle(e.target.value)} />
-        <input
-          type="number"
-          value={price}
-          onChange={(e) => setPrice(e.target.value)}
-        />
-        <button onClick={handleSave}>Salvează</button>
-        <button onClick={handleCancel}>Anulează</button>
+      <div className="card">
+        <CardImage product={product} />
+        <div className="card-body">
+          <input value={title} onChange={(e) => setTitle(e.target.value)} />
+          <input
+            type="number"
+            step="0.01"
+            min="0"
+            value={price}
+            onChange={(e) => setPrice(e.target.value)}
+          />
+          <div className="actions">
+            <button className="btn btn-primary" onClick={handleSave}>
+              Salvează
+            </button>
+            <button className="btn btn-secondary" onClick={handleCancel}>
+              Anulează
+            </button>
+          </div>
+        </div>
       </div>
     );
   }
 
   return (
-    <div style={{ marginTop: "16px" }}>
-      <h3>{product.title}</h3>
-      <p>{product.price} $</p>
-      <button onClick={() => setIsEditing(true)}>Editează</button>
-      <button onClick={() => onDelete(product)}>Șterge</button>
+    <div className="card">
+      <CardImage product={product} />
+      <div className="card-body">
+        {product.category && (
+          <span className="category">{product.category}</span>
+        )}
+        <h3>{product.title}</h3>
+        {product.rating && (
+          <p className="rating">
+            <span>★</span> {product.rating}
+          </p>
+        )}
+        <p className="price">${Number(product.price).toFixed(2)}</p>
+        <div className="actions">
+          <button
+            className="btn btn-secondary"
+            onClick={() => setIsEditing(true)}
+          >
+            Editează
+          </button>
+          <button className="btn btn-danger" onClick={() => onDelete(product)}>
+            Șterge
+          </button>
+        </div>
+      </div>
     </div>
   );
 }

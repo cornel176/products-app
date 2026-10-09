@@ -1,3 +1,4 @@
+import "./App.css";
 import ProductsPage from "./pages/ProductsPage";
 
 export default function App() {

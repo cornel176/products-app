@@ -66,25 +66,27 @@ export default function ProductsPage() {
     }
   }
 
-  if (loading) return <p>Se încarcă...</p>;
-  if (loadError) return <p>{loadError}</p>;
+  if (loading) return <p className="status">Se încarcă...</p>;
+  if (loadError) return <p className="status error">{loadError}</p>;
 
   return (
-    <div>
+    <div className="page">
       <h1>Produse</h1>
 
-      {actionError && <p style={{ color: "red" }}>{actionError}</p>}
+      {actionError && <p className="error">{actionError}</p>}
 
       <ProductForm onAdd={handleAdd} />
 
-      {products.map((product) => (
-        <ProductCard
-          key={product.id}
-          product={product}
-          onUpdate={handleUpdate}
-          onDelete={handleDelete}
-        />
-      ))}
+      <div className="grid">
+        {products.map((product) => (
+          <ProductCard
+            key={product.id}
+            product={product}
+            onUpdate={handleUpdate}
+            onDelete={handleDelete}
+          />
+        ))}
+      </div>
     </div>
   );
 }
